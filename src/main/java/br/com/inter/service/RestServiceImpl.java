@@ -23,14 +23,13 @@ public class RestServiceImpl implements RestService {
 	
 	@Override
 	public CloseableHttpResponse post(String url, Object request) throws IOException {
-		LOG.info(format("Executando API %s com conteudo %s", url, request.toString()));
-
 		CloseableHttpClient httpClient = createDefault();
 		CloseableHttpResponse response = null;
 		try {
 			HttpPost httpPost = new HttpPost(url);
 			Gson gson = new Gson();
 			String json = gson.toJson(request);
+			LOG.info(format("Executando API %s com conteudo %s", url, json));
 
 			StringEntity entity = new StringEntity(json);
 			httpPost.setEntity(entity);
@@ -43,6 +42,7 @@ public class RestServiceImpl implements RestService {
 				LOG.info("Integrado com sucesso");
 			} else {
 				LOG.error("Erro ao executar integracao");
+				LOG.error("Codigo do erro : " + response.getStatusLine().getStatusCode());
 				LOG.error(EntityUtils.toString(response.getEntity()));
 			}
 		} catch  (Exception e) {
