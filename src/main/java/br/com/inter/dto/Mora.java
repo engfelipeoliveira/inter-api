@@ -1,7 +1,6 @@
 package br.com.inter.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -28,10 +27,10 @@ public class Mora implements Serializable {
 	private String codigoMora;
 	
 	@SerializedName("taxa")
-	private BigDecimal taxa;
+	private Double taxa;
 	
 	@SerializedName("valor")
-	private BigDecimal valor;
+	private Double valor;
 	
 	@SerializedName("data")
 	private String data;

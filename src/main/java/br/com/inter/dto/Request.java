@@ -1,7 +1,6 @@
 package br.com.inter.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -52,10 +51,10 @@ public class Request implements Serializable {
 	private Desconto desconto3;
 	
 	@SerializedName("valorNominal")
-	private BigDecimal valorNominal;
+	private Double valorNominal;
 	
 	@SerializedName("valorAbatimento")
-	private BigDecimal valorAbatimento;
+	private Double valorAbatimento;
 	
 	@SerializedName("multa")
 	private Multa multa;
