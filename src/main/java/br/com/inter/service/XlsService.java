@@ -12,5 +12,4 @@ public interface XlsService {
 	
 	HashMap<File, List<Row>> read() throws Exception;
 	Request buildRequest(Row row) throws Exception;
-	
 }

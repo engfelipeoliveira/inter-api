@@ -1,5 +1,6 @@
 package br.com.inter.service;
 
+import static br.com.inter.service.FileUtils.filterFile;
 import static java.lang.Double.parseDouble;
 import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
 import static org.apache.poi.ss.usermodel.CellType.STRING;
@@ -170,7 +171,7 @@ public class XlsServiceImpl implements XlsService {
 		List<Row> rows = new ArrayList<Row>();
 		HashMap<File, List<Row>> mapFileRows = new HashMap<File, List<Row>>();
 
-		FilenameFilter filter = FileUtils.filterFile("XLS", "XLSX");
+		FilenameFilter filter = filterFile("XLS", "XLSX");
 		File[] files = new File(DIR_SOURCE).listFiles(filter);
 		for (File file : files) {
 			rows = readRows(file);
@@ -178,6 +179,19 @@ public class XlsServiceImpl implements XlsService {
 			// FileUtils.moveFile(DIR_TARGET, file);
 		}
 		return mapFileRows;
+	}
+	
+
+	@Override
+	public Request buildRequest(Row row) throws Exception {
+		return Request.builder().pagador(buildPagador(row)).dataEmissao(toDate(row, INDEX_DATA_EMISSAO))
+				.seuNumero(toString(row, INDEX_SEU_NUMERO)).dataLimite(toString(row, INDEX_DATA_LIMITE))
+				.dataVencimento(toDate(row, INDEX_DATA_VENCIMENTO)).mensagem(buildMensagem(row))
+				.desconto1(buildDesconto1(row)).desconto2(buildDesconto2(row)).desconto3(buildDesconto3(row))
+				.valorNominal(toDouble(row, INDEX_VALOR_NOMINAL)).valorAbatimento(toDouble(row, INDEX_VALOR_ABATIMENTO))
+				.multa(buildMulta(row)).mora(buildMora(row))
+				.cnpjCPFBeneficiario(toString(row, INDEX_CNPJ_CPF_BENEFICIARIO))
+				.numDiasAgenda(toString(row, INDEX_NUM_DIAS)).build();
 	}
 
 	private List<Row> readRows(File file) throws Exception {
@@ -269,17 +283,4 @@ public class XlsServiceImpl implements XlsService {
 		return Mora.builder().codigoMora(toString(row, INDEX_MORA_CODIGO_MORA)).taxa(toDouble(row, INDEX_MORA_TAXA))
 				.valor(toDouble(row, INDEX_MORA_VALOR)).data(toDate(row, INDEX_MORA_DATA)).build();
 	}
-
-	@Override
-	public Request buildRequest(Row row) throws Exception {
-		return Request.builder().pagador(buildPagador(row)).dataEmissao(toDate(row, INDEX_DATA_EMISSAO))
-				.seuNumero(toString(row, INDEX_SEU_NUMERO)).dataLimite(toString(row, INDEX_DATA_LIMITE))
-				.dataVencimento(toDate(row, INDEX_DATA_VENCIMENTO)).mensagem(buildMensagem(row))
-				.desconto1(buildDesconto1(row)).desconto2(buildDesconto2(row)).desconto3(buildDesconto3(row))
-				.valorNominal(toDouble(row, INDEX_VALOR_NOMINAL)).valorAbatimento(toDouble(row, INDEX_VALOR_ABATIMENTO))
-				.multa(buildMulta(row)).mora(buildMora(row))
-				.cnpjCPFBeneficiario(toString(row, INDEX_CNPJ_CPF_BENEFICIARIO))
-				.numDiasAgenda(toString(row, INDEX_NUM_DIAS)).build();
-	}
-
 }
